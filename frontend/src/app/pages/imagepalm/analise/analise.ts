@@ -2,7 +2,10 @@ import { Canvas } from '@/components/canvas/canvas';
 import { MapaDeCalor } from '@/components/mapa-de-calor/mapa-de-calor';
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
 import { Table, TableModule } from 'primeng/table';
 
 @Component({
@@ -11,6 +14,8 @@ import { Table, TableModule } from 'primeng/table';
     imports: [
         TableModule,
         ButtonModule,
+        InputNumberModule,
+        FormsModule,
         MapaDeCalor,
         CommonModule
     ],
@@ -35,7 +40,7 @@ export class Analise {
 
     mapaDeCalorDimensoes = {x: 16, y: 16};
     mapaDeCalor: number[] = [];
-    periodoDeAmostragemMs = 1000 / 60;
+    fps = 60;
 
     conectado = false;
 
@@ -84,34 +89,26 @@ export class Analise {
     }
 
     async inicializarLeitura() {
-        // enviar mensagem de inicialização e definir periodo de amostragem
-        const bufferInicializacao = new Uint8Array(5);
-        let view = new DataView(bufferInicializacao.buffer);
-        view.setUint8(0, MSG.INICIAR);
-        view.setUint32(1, this.periodoDeAmostragemMs, true);
-        await this.escritor?.write(bufferInicializacao);
-
-        // receber dimensões do sensor
-        view = new DataView((await this.ler(2)).buffer, 0, 2);
-        this.mapaDeCalorDimensoes.x = view.getUint8(0);
-        this.mapaDeCalorDimensoes.y = view.getUint8(1);
     }
 
     async encerrarLeitura() {
-        await this.escritor?.write(new Uint8Array([MSG.ENCERRAR]));
     }
 
     async lacoDeLeitura() {
         try {
             while (this.conectado && this.leitor) {
-                const pacote = await this.ler(this.mapaDeCalorDimensoes.x * this.mapaDeCalorDimensoes.y * 4);
+                this.escritor?.write(new Uint8Array(['A'.charCodeAt(0)]));
+                const pacote = await this.ler(this.mapaDeCalorDimensoes.x * this.mapaDeCalorDimensoes.y);
                 this.mapaDeCalor = Array.from(
-                    new Float32Array(
+                    new Uint8Array(
                         pacote.buffer, 
                         0, 
                         this.mapaDeCalorDimensoes.x * this.mapaDeCalorDimensoes.y
                     )
-                );
+                ).map(x => x / 255);
+                await new Promise(res => {
+                    setTimeout(res, 1000 / this.fps);
+                })
             }
         }
         catch (e) {
