@@ -27,15 +27,38 @@
             </div>
         </div>
     }
-    <div class="col-span-12" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div class="card col-span-12 flex flex-col items-center">
         @if (!conectado){
-            <p>Conecte o dispositivo a uma porta USB</p>
+            <div class="mb-10">Conecte o dispositivo a uma porta USB</div>
+            <div class="flex gap-2 mb-8">
+                <div class="flex-auto">
+                    <label class="mb-2 font-bold block" for="largura">Largura</label>
+                    <p-inputnumber #inputLargura="ngModel" inputId="largura" [required]="true" [(ngModel)]="mapaDeCalorDimensoes.x" />
+                </div>
+                <div class="flex-auto">
+                    <label class="mb-2 font-bold block" for="altura">Altura</label>
+                    <p-inputnumber #inputAltura="ngModel" inputId="altura" [required]="true" [(ngModel)]="mapaDeCalorDimensoes.y" />
+                </div>
+                <div class="flex-auto">
+                    <label class="mb-2 font-bold block" for="fps">Taxa de Quadros (Hz)</label>
+                    <p-inputnumber #inputFps="ngModel" inputId="fps" [required]="true" mode="decimal" [minFractionDigits]="1" [(ngModel)]="fps" />
+                </div>
+            </div>
+            <p-button 
+                [disabled]="inputAltura.invalid || inputLargura.invalid || inputFps.invalid"
+                label="Conectar" 
+                icon="pi pi-arrow-right-arrow-left"
+                severity="primary"
+                (click)="conectar()"
+            ></p-button>
         }
-        <p-button 
-            [label]="conectado ? 'Desconectar' : 'Conectar'" 
-            [icon]="conectado ? 'pi pi-times' : 'pi pi-arrow-right-arrow-left'"
-            [severity]="conectado ? 'danger' : 'primary'"
-            (click)="conectado ? desconectar() : conectar()"
-        ></p-button>
+        @else {
+            <p-button 
+                label="Desconectar" 
+                icon="pi pi-times"
+                severity="danger"
+                (click)="desconectar()"
+            ></p-button>
+        }
     </div>
 </div>
