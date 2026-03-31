@@ -15,6 +15,7 @@ import { Table, TableModule } from 'primeng/table';
         TableModule,
         ButtonModule,
         InputNumberModule,
+        SelectModule,
         FormsModule,
         MapaDeCalor,
         CommonModule
@@ -38,9 +39,15 @@ export class Analise {
         }
     ];
 
+    baudRateOpcoes = [
+        {name: '9600', value: 9600},
+        {name: '115200', value: 115200}
+    ];
+
     mapaDeCalorDimensoes = {x: 16, y: 16};
     mapaDeCalor: number[] = [];
     fps = 60;
+    baudRateOpcao = this.baudRateOpcoes[0];
 
     conectado = false;
 
@@ -60,7 +67,7 @@ export class Analise {
     async conectar() {
         try {
             const porta = await (navigator as any).serial.requestPort();
-            await porta.open({ baudRate: 115200 });
+            await porta.open({ baudRate: this.baudRateOpcao.value });
             
             this.conectado = true;
             this.leitor = porta.readable.getReader();

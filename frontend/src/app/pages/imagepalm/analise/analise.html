@@ -43,6 +43,10 @@
                     <label class="mb-2 font-bold block" for="fps">Taxa de Quadros (Hz)</label>
                     <p-inputnumber #inputFps="ngModel" inputId="fps" [required]="true" mode="decimal" [minFractionDigits]="1" [(ngModel)]="fps" />
                 </div>
+                <div class="flex-auto">
+                    <label class="mb-2 font-bold block" for="baudRate">Taxa de Transmissão</label>
+                    <p-select fluid inputId="baudRate" [(ngModel)]="baudRateOpcao" [options]="baudRateOpcoes" optionLabel="name" />
+                </div>
             </div>
             <p-button 
                 [disabled]="inputAltura.invalid || inputLargura.invalid || inputFps.invalid"
