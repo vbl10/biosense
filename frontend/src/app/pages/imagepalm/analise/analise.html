@@ -2,7 +2,7 @@
     @if (conectado) {
         <div class="card col-span-12 xl:col-span-12">
             <div class="font-semibold text-xl mb-4">Pressão da Mão</div>
-            <div class="grid grid-cols-12 gap-8">
+            <div class="grid grid-cols-12 gap-8 mb-8">
                 <div class="col-span-12 xl:col-span-6" style="display: flex; justify-content: center;">
                     <div style="aspect-ratio: 1; max-width: 500px; width: 100%;">
                         <app-mapa-de-calor #mapaCalor [dimensoes]="mapaDeCalorDimensoes" [dados]="mapaDeCalor"></app-mapa-de-calor>
@@ -25,10 +25,18 @@
                     </p-table>
                 </div>
             </div>
+            <div class="flex w-full justify-center">
+                <p-button 
+                    label="Desconectar" 
+                    icon="pi pi-times"
+                    severity="danger"
+                    (click)="desconectar()"
+                ></p-button>
+            </div>
         </div>
     }
-    <div class="card col-span-12 flex flex-col items-center">
-        @if (!conectado){
+    @if (!conectado){
+        <div class="card col-span-12 flex flex-col items-center">
             <div class="mb-10">Conecte o dispositivo a uma porta USB</div>
             <div class="flex gap-2 mb-8">
                 <div class="flex-auto">
@@ -55,14 +63,6 @@
                 severity="primary"
                 (click)="conectar()"
             ></p-button>
-        }
-        @else {
-            <p-button 
-                label="Desconectar" 
-                icon="pi pi-times"
-                severity="danger"
-                (click)="desconectar()"
-            ></p-button>
-        }
-    </div>
+        </div>
+    }
 </div>

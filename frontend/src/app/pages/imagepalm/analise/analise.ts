@@ -105,11 +105,11 @@ export class Analise {
         try {
             while (this.conectado && this.leitor) {
                 this.escritor?.write(new Uint8Array(['A'.charCodeAt(0)]));
-                const pacote = await this.ler(this.mapaDeCalorDimensoes.x * this.mapaDeCalorDimensoes.y);
+                const pacote = await this.ler(this.mapaDeCalorDimensoes.x * this.mapaDeCalorDimensoes.y + 1);
                 this.mapaDeCalor = Array.from(
                     new Uint8Array(
                         pacote.buffer, 
-                        0, 
+                        1, 
                         this.mapaDeCalorDimensoes.x * this.mapaDeCalorDimensoes.y
                     )
                 ).map(x => x / 255);
