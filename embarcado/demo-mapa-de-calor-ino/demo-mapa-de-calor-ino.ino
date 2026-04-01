@@ -33,6 +33,7 @@ void loop() {
           }
       }
       mapa[bolinha.x + bolinha.y * w] = 255;
+      Serial.write((uint8_t)MSG::ENVIAR_QUADRO);
       Serial.write(mapa, sizeof(mapa));
       break;
     }
