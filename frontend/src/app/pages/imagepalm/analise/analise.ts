@@ -96,6 +96,9 @@ export class Analise {
     }
 
     async inicializarLeitura() {
+        return new Promise<void>(resp => {
+            setTimeout(resp, 2000);
+        })
     }
 
     async encerrarLeitura() {
